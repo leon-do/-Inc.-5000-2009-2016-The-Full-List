@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+    <style>
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            height: 50px;
+        }
+    </style>     
+</head>
+<body>
+
+
+
+
+
+
+
+    <div class='container'>
+        <table id='dataTable' class="tablesorter">
+            <tr>
+                <th>Company</th>
+                <th>Industry</th>
+                <th>State</th>
+                <th>Metro</th>
+                <th>URL</th>
+                <th>Employees</th>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
+    <script>
+
+            
+
+
+
+        //populate ALL data
+        $.get('http://52.14.154.146/', function(data){
+
+            for (var i = 1; i < data.length; i++){
+                var company = data[i].Company;
+                var industry = data[i].Industry;
+                var state = data[i].State;
+                var metro = data[i].Metro;
+                var URL = data[i].URL;
+                var employees = data[i].Employees;
+
+
+                $('#dataTable').append
+                (`
+                    <tr class="responsive-table" id='${i}'>
+                        <td class='companyClass'>    ${company}  </td>
+                        <td class='industryClass'>   ${industry} </td>
+                        <td class='stateClass'>      ${state}    </td>
+                        <td class='metroClass'>      ${metro}    </td>
+                        <td class='urlClass'>   
+                            <a href='${URL}' target='_blank'>
+                                ${URL}  
+                            </a>     
+                        </td>
+                        <td class='employeesClass'>  ${employees}</td>
+                    </tr>
+                `)
+            }//for loop
+        })
+
+        .done(function(){
+
+
+
+        })//get
+
+
+
+
+    </script>
+</body>
+</html>
