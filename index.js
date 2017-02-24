@@ -7,4 +7,4 @@ app.get('/', function (req, res) {
     res.json(data.inc)
 })
  
-app.listen(3000)
+app.listen(80)
