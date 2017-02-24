@@ -22,23 +22,24 @@
 </head>
 <body>
 
-
-
-
-
-
-
     <div class='container'>
-        <table id='dataTable' class="tablesorter">
-            <tr>
-                <th>Company</th>
-                <th>Industry</th>
-                <th>State</th>
-                <th>Metro</th>
-                <th>URL</th>
-                <th>Employees</th>
-            </tr>
-        </table>
+
+        <div class="input-field">
+            <select id='stateList'>
+            <option value="" disabled selected>Location</option>
+            </select>
+        </div> 
+
+        <div class="input-field">
+            <select id='industryList'>
+            <option value="" disabled selected>Industry</option>
+            </select>
+        </div>   
+
+        <button id='searchId'>Search</button>
+
+        <div id='tableContainer'></div>
+
     </div>
 
 
@@ -56,51 +57,110 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <script src='./assets/js/array.js'></script>
     <script>
 
-            
 
 
+
+
+        //populate state dropdown
+        for (let i = 0; i < stateArray.length; i++){
+            var state = stateArray[i];
+            $("#stateList").append
+            (`
+                <option class='optionState' value='${state}'> ${state} </option>
+            `)            
+        }
+
+
+        //populate industry dropdown
+        for (let j = 0; j < industryArray.length; j++){
+            var industry = industryArray[j];
+            $("#industryList").append
+            (`
+                <option class='optionIndustry' value='${industry}'> ${industry} </option>
+            `)            
+        }
+
+
+        //display dropdown
+        $('select').material_select();
+
+
+// ========================================================================
+
+        var allData;
 
         //populate ALL data
         $.get('http://52.14.154.146/', function(data){
-
-            for (var i = 1; i < data.length; i++){
-                var company = data[i].Company;
-                var industry = data[i].Industry;
-                var state = data[i].State;
-                var metro = data[i].Metro;
-                var URL = data[i].URL;
-                var employees = data[i].Employees;
-
-
-                $('#dataTable').append
-                (`
-                    <tr class="responsive-table" id='${i}'>
-                        <td class='companyClass'>    ${company}  </td>
-                        <td class='industryClass'>   ${industry} </td>
-                        <td class='stateClass'>      ${state}    </td>
-                        <td class='metroClass'>      ${metro}    </td>
-                        <td class='urlClass'>   
-                            <a href='${URL}' target='_blank'>
-                                ${URL}  
-                            </a>     
-                        </td>
-                        <td class='employeesClass'>  ${employees}</td>
-                    </tr>
-                `)
-            }//for loop
+            buttonAction(data)
         })
 
-        .done(function(){
+
+
+        function buttonAction(data){
+            $("#searchId").on('click',function(){
+
+                console.log($("#stateList option:selected").attr('value'))
+                var userState = $("#stateList option:selected").attr('value');
+                console.log($("#industryList option:selected").attr('value'))
+                var userIndustry = $("#stateList option:selected").attr('value');
+
+
+                //insert table
+                $("#tableContainer").html
+                (`
+                    <table id='dataTable' class="tablesorter">
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>State</th>
+                            <th>Metro</th>
+                            <th>URL</th>
+                            <th>Employees</th>
+                        </tr>
+                    </table>
+                `)
+
+                for (var i = 1; i < data.length; i++){
+                    var company = data[i].Company;
+                    var industry = data[i].Industry;
+                    var state = data[i].State;
+                    var metro = data[i].Metro;
+                    var URL = data[i].URL;
+                    var employees = data[i].Employees;
+
+                    if (userState == state && userIndustry == industry){
+                        console.log(i)
+                        append2Table(i, company, insutry, state, metro, URL, employees)
+                    }//if
+
+                }//for loop
+            })//click
+        }//function
 
 
 
-        })//get
-
-
-
+function append2Table(i, company, insutry, state, metro, URL, employees){
+    console.log('yay')
+    $('#dataTable').append
+    (`
+        <tr class="responsive-table" id='${i}'>
+            <td class='companyClass'>    ${company}  </td>
+            <td class='industryClass'>   ${industry} </td>
+            <td class='stateClass'>      ${state}    </td>
+            <td class='metroClass'>      ${metro}    </td>
+            <td class='urlClass'>   
+                <a href='${URL}' target='_blank'>
+                    ${URL}  
+                </a>     
+            </td>
+            <td class='employeesClass'>  ${employees}</td>
+        </tr>
+    `)//append
+}
 
     </script>
 </body>
