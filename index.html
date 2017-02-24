@@ -22,21 +22,7 @@
 </head>
 <body>
 
-    <div class='container'>
-
-        <div class="input-field">
-            <select id='stateList'>
-            <option value="" disabled selected>Location</option>
-            </select>
-        </div> 
-
-        <div class="input-field">
-            <select id='industryList'>
-            <option value="" disabled selected>Industry</option>
-            </select>
-        </div>   
-
-        <button id='searchId'>Search</button>
+    <div class='container'>  
 
         <div id='tableContainer'></div>
 
@@ -64,52 +50,20 @@
 
 
 
-
-        //populate state dropdown
-        for (let i = 0; i < stateArray.length; i++){
-            var state = stateArray[i];
-            $("#stateList").append
-            (`
-                <option class='optionState' value='${state}'> ${state} </option>
-            `)            
-        }
-
-
-        //populate industry dropdown
-        for (let j = 0; j < industryArray.length; j++){
-            var industry = industryArray[j];
-            $("#industryList").append
-            (`
-                <option class='optionIndustry' value='${industry}'> ${industry} </option>
-            `)            
-        }
-
-
-        //display dropdown
-        $('select').material_select();
-
-
 // ========================================================================
 
         var allData;
 
         //populate ALL data
         $.get('http://52.14.154.146/', function(data){
-            buttonAction(data)
+            populateTable(data)
         })
 
 
 
-        function buttonAction(data){
-            $("#searchId").on('click',function(){
+        function populateTable(data){
 
-                console.log($("#stateList option:selected").attr('value'))
-                var userState = $("#stateList option:selected").attr('value');
-                console.log($("#industryList option:selected").attr('value'))
-                var userIndustry = $("#stateList option:selected").attr('value');
-
-
-                //insert table
+                //insert top row
                 $("#tableContainer").html
                 (`
                     <table id='dataTable' class="tablesorter">
@@ -124,6 +78,7 @@
                     </table>
                 `)
 
+                //insert the rest
                 for (var i = 1; i < data.length; i++){
                     var company = data[i].Company;
                     var industry = data[i].Industry;
@@ -132,19 +87,16 @@
                     var URL = data[i].URL;
                     var employees = data[i].Employees;
 
-                    if (userState == state && userIndustry == industry){
-                        console.log(i)
-                        append2Table(i, company, insutry, state, metro, URL, employees)
-                    }//if
+
+                    append2Table(i, company, industry, state, metro, URL, employees)
 
                 }//for loop
-            })//click
         }//function
 
 
 
-function append2Table(i, company, insutry, state, metro, URL, employees){
-    console.log('yay')
+function append2Table(i, company, industry, state, metro, URL, employees){
+
     $('#dataTable').append
     (`
         <tr class="responsive-table" id='${i}'>
