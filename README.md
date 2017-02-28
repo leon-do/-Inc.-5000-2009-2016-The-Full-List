@@ -1,3 +1,6 @@
+Scraper is in assets > data > scraper.js
+
+
 API here: http://52.14.154.146/
 
 
